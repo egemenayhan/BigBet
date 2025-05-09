@@ -1,0 +1,574 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		7B2E84A82DCE335200E7AAC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2E84892DCE335000E7AAC1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B2E84902DCE335000E7AAC1;
+			remoteInfo = BigBet;
+		};
+		7B2E84B22DCE335200E7AAC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2E84892DCE335000E7AAC1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B2E84902DCE335000E7AAC1;
+			remoteInfo = BigBet;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7B2E84912DCE335000E7AAC1 /* BigBet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BigBet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B2E84A72DCE335200E7AAC1 /* BigBetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BigBetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B2E84B12DCE335200E7AAC1 /* BigBetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BigBetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7B2E84B92DCE335200E7AAC1 /* Exceptions for "BigBet" folder in "BigBet" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7B2E84902DCE335000E7AAC1 /* BigBet */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		7B2E84932DCE335000E7AAC1 /* BigBet */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7B2E84B92DCE335200E7AAC1 /* Exceptions for "BigBet" folder in "BigBet" target */,
+			);
+			path = BigBet;
+			sourceTree = "<group>";
+		};
+		7B2E84AA2DCE335200E7AAC1 /* BigBetTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BigBetTests;
+			sourceTree = "<group>";
+		};
+		7B2E84B42DCE335200E7AAC1 /* BigBetUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BigBetUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7B2E848E2DCE335000E7AAC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B2E84A42DCE335200E7AAC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B2E84AE2DCE335200E7AAC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7B2E84882DCE335000E7AAC1 = {
+			isa = PBXGroup;
+			children = (
+				7B2E84932DCE335000E7AAC1 /* BigBet */,
+				7B2E84AA2DCE335200E7AAC1 /* BigBetTests */,
+				7B2E84B42DCE335200E7AAC1 /* BigBetUITests */,
+				7B2E84922DCE335000E7AAC1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7B2E84922DCE335000E7AAC1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7B2E84912DCE335000E7AAC1 /* BigBet.app */,
+				7B2E84A72DCE335200E7AAC1 /* BigBetTests.xctest */,
+				7B2E84B12DCE335200E7AAC1 /* BigBetUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7B2E84902DCE335000E7AAC1 /* BigBet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B2E84BA2DCE335200E7AAC1 /* Build configuration list for PBXNativeTarget "BigBet" */;
+			buildPhases = (
+				7B2E848D2DCE335000E7AAC1 /* Sources */,
+				7B2E848E2DCE335000E7AAC1 /* Frameworks */,
+				7B2E848F2DCE335000E7AAC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7B2E84932DCE335000E7AAC1 /* BigBet */,
+			);
+			name = BigBet;
+			packageProductDependencies = (
+			);
+			productName = BigBet;
+			productReference = 7B2E84912DCE335000E7AAC1 /* BigBet.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7B2E84A62DCE335200E7AAC1 /* BigBetTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B2E84BF2DCE335200E7AAC1 /* Build configuration list for PBXNativeTarget "BigBetTests" */;
+			buildPhases = (
+				7B2E84A32DCE335200E7AAC1 /* Sources */,
+				7B2E84A42DCE335200E7AAC1 /* Frameworks */,
+				7B2E84A52DCE335200E7AAC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7B2E84A92DCE335200E7AAC1 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7B2E84AA2DCE335200E7AAC1 /* BigBetTests */,
+			);
+			name = BigBetTests;
+			packageProductDependencies = (
+			);
+			productName = BigBetTests;
+			productReference = 7B2E84A72DCE335200E7AAC1 /* BigBetTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7B2E84B02DCE335200E7AAC1 /* BigBetUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B2E84C22DCE335200E7AAC1 /* Build configuration list for PBXNativeTarget "BigBetUITests" */;
+			buildPhases = (
+				7B2E84AD2DCE335200E7AAC1 /* Sources */,
+				7B2E84AE2DCE335200E7AAC1 /* Frameworks */,
+				7B2E84AF2DCE335200E7AAC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7B2E84B32DCE335200E7AAC1 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7B2E84B42DCE335200E7AAC1 /* BigBetUITests */,
+			);
+			name = BigBetUITests;
+			packageProductDependencies = (
+			);
+			productName = BigBetUITests;
+			productReference = 7B2E84B12DCE335200E7AAC1 /* BigBetUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7B2E84892DCE335000E7AAC1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					7B2E84902DCE335000E7AAC1 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					7B2E84A62DCE335200E7AAC1 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 7B2E84902DCE335000E7AAC1;
+					};
+					7B2E84B02DCE335200E7AAC1 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 7B2E84902DCE335000E7AAC1;
+					};
+				};
+			};
+			buildConfigurationList = 7B2E848C2DCE335000E7AAC1 /* Build configuration list for PBXProject "BigBet" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7B2E84882DCE335000E7AAC1;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 7B2E84922DCE335000E7AAC1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7B2E84902DCE335000E7AAC1 /* BigBet */,
+				7B2E84A62DCE335200E7AAC1 /* BigBetTests */,
+				7B2E84B02DCE335200E7AAC1 /* BigBetUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7B2E848F2DCE335000E7AAC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B2E84A52DCE335200E7AAC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B2E84AF2DCE335200E7AAC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7B2E848D2DCE335000E7AAC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B2E84A32DCE335200E7AAC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B2E84AD2DCE335200E7AAC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7B2E84A92DCE335200E7AAC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B2E84902DCE335000E7AAC1 /* BigBet */;
+			targetProxy = 7B2E84A82DCE335200E7AAC1 /* PBXContainerItemProxy */;
+		};
+		7B2E84B32DCE335200E7AAC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B2E84902DCE335000E7AAC1 /* BigBet */;
+			targetProxy = 7B2E84B22DCE335200E7AAC1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		7B2E84BB2DCE335200E7AAC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YDABZ672Z5;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BigBet/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.egemenayhan.BigBet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7B2E84BC2DCE335200E7AAC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YDABZ672Z5;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BigBet/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.egemenayhan.BigBet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7B2E84BD2DCE335200E7AAC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7B2E84BE2DCE335200E7AAC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7B2E84C02DCE335200E7AAC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YDABZ672Z5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.egemenayhan.BigBetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BigBet.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BigBet";
+			};
+			name = Debug;
+		};
+		7B2E84C12DCE335200E7AAC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YDABZ672Z5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.egemenayhan.BigBetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BigBet.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BigBet";
+			};
+			name = Release;
+		};
+		7B2E84C32DCE335200E7AAC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YDABZ672Z5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.egemenayhan.BigBetUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BigBet;
+			};
+			name = Debug;
+		};
+		7B2E84C42DCE335200E7AAC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YDABZ672Z5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.egemenayhan.BigBetUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BigBet;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7B2E848C2DCE335000E7AAC1 /* Build configuration list for PBXProject "BigBet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B2E84BD2DCE335200E7AAC1 /* Debug */,
+				7B2E84BE2DCE335200E7AAC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B2E84BA2DCE335200E7AAC1 /* Build configuration list for PBXNativeTarget "BigBet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B2E84BB2DCE335200E7AAC1 /* Debug */,
+				7B2E84BC2DCE335200E7AAC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B2E84BF2DCE335200E7AAC1 /* Build configuration list for PBXNativeTarget "BigBetTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B2E84C02DCE335200E7AAC1 /* Debug */,
+				7B2E84C12DCE335200E7AAC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B2E84C22DCE335200E7AAC1 /* Build configuration list for PBXNativeTarget "BigBetUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B2E84C32DCE335200E7AAC1 /* Debug */,
+				7B2E84C42DCE335200E7AAC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7B2E84892DCE335000E7AAC1 /* Project object */;
+}
