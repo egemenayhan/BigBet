@@ -1,0 +1,74 @@
+# .gitignore file created for free with Tower (https://www.git-tower.com/)
+# For suggestions or improvements please contact us using support@git-tower.com
+# Generated on 2025-05-02
+# Includes: swift, xcode
+
+### Universal ###
+# Common files that should be ignored in all projects
+
+# Logs
+*.log
+# Temporary files
+*.tmp
+*~
+
+*.bak
+# Environment files (containing secrets, API keys, credentials)
+.env
+*.env
+.env.*
+
+# Local configuration that shouldn't be shared
+*.local
+
+### Swift ###
+# swift specific files
+
+build/
+DerivedData/
+*.xcodeproj/*
+*.xcworkspace/*
+timeline.xctimeline
+
+playground.xcworkspace
+.build/
+Dependencies/
+.accio/
+
+### Xcode ###
+# Xcode IDE files and build settings
+
+# Xcode
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+
+*.xccheckout
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+
+*.xcuserstate
+*.xcscmblueprint
+*.xcscheme
+*.xcworkspacedata
+*.xcodeproj/*
+
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+*.xcscmblueprint
+.xccheckout
+/*.gcno
+**/xcshareddata/WorkspaceSettings.xcsettings
