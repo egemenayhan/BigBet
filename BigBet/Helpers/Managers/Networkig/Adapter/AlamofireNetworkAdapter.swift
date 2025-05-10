@@ -6,21 +6,36 @@
 //
 
 import Alamofire
+import Foundation
+
+final private class AlamofireLogger: EventMonitor {
+
+    func requestDidResume(_ request: Request) {
+        guard let urlRequest = request.request else { return }
+        Logger.log(request: urlRequest)
+    }
+
+    func request(_ request: DataRequest, didValidateRequest urlRequest: URLRequest?, response: HTTPURLResponse, data: Data?, withResult result: Request.ValidationResult) {
+        Logger.log(response: response, bodyData: data)
+    }
+}
 
 final class AlamofireNetworkAdapter: NetworkAdapter {
 
     var globalQueryParams: [String: String] = [:]
 
+    let session = Session(eventMonitors: [ AlamofireLogger() ])
+
     func perform<T: APIRequest>(_ request: T, baseURL: String) async throws -> T.Response {
         let url = baseURL + request.path
 
         var mergedParams = request.parameters ?? [:]
-                for (key, value) in globalQueryParams {
-                    mergedParams[key] = value
-                }
+        for (key, value) in globalQueryParams {
+            mergedParams[key] = value
+        }
 
         return try await withCheckedThrowingContinuation { continuation in
-            AF.request(url,
+            session.request(url,
                        method: mapMethod(request.method),
                        parameters: mergedParams,
                        encoding: mapEncoding(request.encoding))
