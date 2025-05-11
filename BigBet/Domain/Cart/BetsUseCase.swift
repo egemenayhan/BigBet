@@ -1,0 +1,81 @@
+//
+//  BetsUseCase.swift
+//  BigBet
+//
+//  Created by Egemen Ayhan on 11.05.2025.
+//
+
+import Foundation
+import Combine
+
+protocol BetsUseCaseProtocol {
+
+    var betsSubject: PassthroughSubject<[Bet], Never> { get }
+    var betUpdateSubject: PassthroughSubject<Bet, Never> { get }
+    var totalBetPrice: CurrentValueSubject<Double, Never> { get }
+
+    func getAllBets() -> [Bet]
+    func placeBet(_ bet: Bet)
+    func removeBetForEvent(id: String)
+    func getBetForEvent(id: String) -> Bet?
+}
+
+final class BetsUseCase: BetsUseCaseProtocol {
+
+    private let storage: BetStorageProtocol
+    private var cancellables: Set<AnyCancellable> = []
+
+    var totalBetPrice = CurrentValueSubject<Double, Never>(0)
+
+    init(storage: BetStorageProtocol) {
+        self.storage = storage
+
+        bindTotalBetPrice()
+
+        let bets = storage.getAllBets()
+        calculateTotalBetPrice(bets: bets)
+    }
+
+    private func bindTotalBetPrice() {
+        storage.betsSubject
+            .sink { [weak self] bets in
+                guard let self = self else { return }
+                calculateTotalBetPrice(bets: bets)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func calculateTotalBetPrice(bets: [Bet]) {
+        guard !bets.isEmpty else {
+            totalBetPrice.value = 0
+            totalBetPrice.send(0)
+            return
+        }
+        totalBetPrice.value = bets.reduce(1) { $0 * $1.odd.price }
+        totalBetPrice.send(totalBetPrice.value)
+    }
+
+    var betsSubject: PassthroughSubject<[Bet], Never> {
+        storage.betsSubject
+    }
+
+    var betUpdateSubject: PassthroughSubject<Bet, Never> {
+        storage.betUpdateSubject
+    }
+
+    func getAllBets() -> [Bet] {
+        storage.getAllBets()
+    }
+
+    func placeBet(_ bet: Bet) {
+        storage.addBet(bet)
+    }
+
+    func removeBetForEvent(id: String) {
+        storage.removeBetForEvent(id: id)
+    }
+
+    func getBetForEvent(id: String) -> Bet? {
+        storage.getBetForEvent(id: id)
+    }
+}
