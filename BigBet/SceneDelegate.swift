@@ -19,8 +19,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         /// 2. Create a new UIWindow using the windowScene constructor which takes in a window scene.
         let window = UIWindow(windowScene: windowScene)
 
+        applyNavigationBarTheme()
+
         /// 3. Create a view hierarchy programmatically
-        let viewController = ViewController()
+
+        let networkManager = NetworkManager(baseURL: "https://api.the-odds-api.com", adapter: AlamofireNetworkAdapter())
+        let viewModel = EventsListViewModel(eventsUseCase: EventsUseCase(networkManager: networkManager))
+        let viewController = EventsListViewController(viewModel: viewModel)
         let navigation = UINavigationController(rootViewController: viewController)
 
         /// 4. Set the root view controller of the window with your view controller
@@ -59,6 +64,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    func applyNavigationBarTheme() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = ThemeManager.current.navBarBackgroundColor
+        appearance.titleTextAttributes = [.foregroundColor: ThemeManager.current.navBarTitleColor]
+        appearance.largeTitleTextAttributes = [.foregroundColor: ThemeManager.current.navBarTitleColor]
 
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().tintColor = ThemeManager.current.navBarTintColor // back arrow, buttons
+
+        // Apply immediately if you're inside a view controller
+        UINavigationBar.appearance() .barStyle = ThemeManager.current == .light ? .default : .black
+    }
 }
 

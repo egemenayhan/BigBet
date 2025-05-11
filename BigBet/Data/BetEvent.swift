@@ -82,6 +82,17 @@ struct BetEvent: Decodable {
     }
 }
 
+extension BetEvent: Hashable {
+
+    static func == (lhs: BetEvent, rhs: BetEvent) -> Bool {
+            lhs.id == rhs.id
+        }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
 enum MSLabel: String, CaseIterable {
     case home = "MS 1"
     case draw = "MS X"
