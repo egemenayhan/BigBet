@@ -34,9 +34,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7B2E84B92DCE335200E7AAC1 /* Exceptions for "BigBet" folder in "BigBet" target */ = {
+		7B9912AD2DD0B53300A782ED /* Exceptions for "BigBet" folder in "BigBet" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AppSetup/Info.plist,
 				Info.plist,
 			);
 			target = 7B2E84902DCE335000E7AAC1 /* BigBet */;
@@ -47,7 +48,7 @@
 		7B2E84932DCE335000E7AAC1 /* BigBet */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				7B2E84B92DCE335200E7AAC1 /* Exceptions for "BigBet" folder in "BigBet" target */,
+				7B9912AD2DD0B53300A782ED /* Exceptions for "BigBet" folder in "BigBet" target */,
 			);
 			path = BigBet;
 			sourceTree = "<group>";
@@ -300,11 +301,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YDABZ672Z5;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BigBet/Info.plist;
+				INFOPLIST_FILE = BigBet/AppSetup/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -327,11 +327,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YDABZ672Z5;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BigBet/Info.plist;
+				INFOPLIST_FILE = BigBet/AppSetup/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
