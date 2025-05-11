@@ -30,4 +30,15 @@ final class EventsListViewModel {
             }
         }
     }
+
+    func filterEvents(for text: String) -> [BetEvent] {
+        if text.isEmpty {
+            return events
+        } else {
+            return events.filter {
+                $0.homeTeam.localizedCaseInsensitiveContains(text) ||
+                $0.awayTeam.localizedCaseInsensitiveContains(text)
+            }
+        }
+    }
 }

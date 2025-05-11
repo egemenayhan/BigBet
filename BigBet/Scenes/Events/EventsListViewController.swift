@@ -13,6 +13,8 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
     private var tableView: UITableView!
     private var dataSource: UITableViewDiffableDataSource<Section, BetEvent>!
     private var cancellables = Set<AnyCancellable>()
+    private var searchBar: UISearchBar!
+    private var isSearching = false
 
     private let viewModel: EventsListViewModel
 
@@ -36,12 +38,11 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
         view.backgroundColor = ThemeManager.current.background
 
         setupTableView()
+        setupSearchBar()
         configureDataSource()
         bindViewModel()
 
-        // Fake initial data load
         viewModel.fetchEvents()
-        applySnapshot()
     }
 
     private func setupTableView() {
@@ -53,17 +54,36 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
         view.addSubview(tableView)
     }
 
+    private func setupSearchBar() {
+        searchBar = UISearchBar()
+        searchBar.searchBarStyle = .minimal
+        searchBar.delegate = self
+        searchBar.tintColor = ThemeManager.current.primaryGreen
+        searchBar.backgroundColor = ThemeManager.current.cardBackground
+        searchBar.barTintColor = ThemeManager.current.primaryGreen
+        searchBar.sizeToFit()
+
+        searchBar.searchTextField.backgroundColor = ThemeManager.current.oddUnselected
+        searchBar.searchTextField.textColor = ThemeManager.current.textPrimary
+        searchBar.searchTextField.leftView?.tintColor = ThemeManager.current.primaryGreen
+        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+            string: "Search teams",
+            attributes: [NSAttributedString.Key.foregroundColor: ThemeManager.current.textSecondary]
+        )
+
+        tableView.tableHeaderView = searchBar
+    }
+
     private func configureDataSource() {
         dataSource = UITableViewDiffableDataSource<Section, BetEvent>(tableView: tableView) { [weak self] tableView, indexPath, event in
             guard let self else { return UITableViewCell() }
 
             let cell = tableView.dequeueReusableCell(withIdentifier: OddsTableViewCell.identifier, for: indexPath) as! OddsTableViewCell
-//            let selectedIndex = self.viewModel.selectedIndices[event.id]
+            // TODO: Handle selected state
             cell.configure(with: event, selectedIndex: 1)
 
-            cell.onOddTapped = { [weak self] tappedIndex in
-                let selected: Int? = tappedIndex == -1 ? nil : tappedIndex
-//                self?.viewModel.selectOdd.send((event, selected))
+            cell.onOddTapped = { tappedIndex in
+                // TODO: Handle selection
             }
 
             return cell
@@ -73,35 +93,41 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
     private func bindViewModel() {
         viewModel.$events
             .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                self?.applySnapshot()
+            .sink { [weak self] events in
+                self?.applySnapshot(events: events)
             }
             .store(in: &cancellables)
-
-//        viewModel.$selectedIndices
-//            .receive(on: RunLoop.main)
-//            .sink { [weak self] _ in
-//                self?.refreshVisibleCells()
-//            }
-//            .store(in: &cancellables)
     }
 
-    private func applySnapshot() {
+    private func applySnapshot(events: [BetEvent]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, BetEvent>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(viewModel.events, toSection: .main)
+        snapshot.appendItems(events, toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
+}
 
-    private func refreshVisibleCells() {
-//        guard let visible = tableView.indexPathsForVisibleRows else { return }
-//
-//        for indexPath in visible {
-//            if let event = dataSource.itemIdentifier(for: indexPath),
-//               let cell = tableView.cellForRow(at: indexPath) as? OddsTableViewCell {
-//                let selected = viewModel.selectedIndices[event.id]
-//                cell.applySelection(at: selected)
-//            }
-//        }
+extension EventsListViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let results = viewModel.filterEvents(for: searchText)
+        applySnapshot(events: results)
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+        searchBar.showsCancelButton = false
+        applySnapshot(events: viewModel.events)
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        guard searchBar.text?.isEmpty ?? true else { return }
+        searchBar.showsCancelButton = true
     }
 }
+
