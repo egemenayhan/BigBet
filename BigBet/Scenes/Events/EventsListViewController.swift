@@ -14,7 +14,8 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
     private var dataSource: UITableViewDiffableDataSource<Section, BetEvent>!
     private var cancellables = Set<AnyCancellable>()
     private var searchBar: UISearchBar!
-    private var isSearching = false
+    private var cartImage = UIImage(systemName: "cart.fill")?
+        .applyingSymbolConfiguration(.init(paletteColors: [ThemeManager.current.primaryGreen]))
 
     private let viewModel: EventsListViewModel
 
@@ -34,9 +35,10 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "BigBet"
+
         view.backgroundColor = ThemeManager.current.background
 
+        setupNavigationBar()
         setupTableView()
         setupSearchBar()
         configureDataSource()
@@ -45,11 +47,31 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
         viewModel.fetchEvents()
     }
 
+    private func setupNavigationBar() {
+        title = "BigBet"
+        updateCartButton()
+    }
+
+    func updateCartButton() {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+
+        let cartButton = UIBarButtonItem(
+            image: cartImage,
+            title: formatter.string(from: viewModel.totalBetPrice as NSNumber) ?? "",//String(format: "%.2f", viewModel.totalBetPrice),
+            target: self,
+            action: #selector(cartButtonTapped)
+        )
+
+        navigationItem.rightBarButtonItem = cartButton
+    }
+
     private func setupTableView() {
         tableView = UITableView(frame: view.bounds, style: .plain)
         tableView.delegate = self
         tableView.autoresizingMask = [.flexibleHeight]
-        tableView.register(OddsTableViewCell.self, forCellReuseIdentifier: OddsTableViewCell.identifier)
+        tableView.register(EventTableViewCell.self, forCellReuseIdentifier: EventTableViewCell.identifier)
         tableView.backgroundColor = ThemeManager.current.background
         view.addSubview(tableView)
     }
@@ -78,12 +100,19 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
         dataSource = UITableViewDiffableDataSource<Section, BetEvent>(tableView: tableView) { [weak self] tableView, indexPath, event in
             guard let self else { return UITableViewCell() }
 
-            let cell = tableView.dequeueReusableCell(withIdentifier: OddsTableViewCell.identifier, for: indexPath) as! OddsTableViewCell
-            // TODO: Handle selected state
-            cell.configure(with: event, selectedIndex: 1)
+            let cell = tableView.dequeueReusableCell(withIdentifier: EventTableViewCell.identifier, for: indexPath) as! EventTableViewCell
 
+            var selectedOddIndex: Int?
+            if let bet = self.viewModel.getBetForEvent(id: event.id), let index = event.odds.firstIndex(of: bet.odd) {
+                selectedOddIndex = index
+            }
+            cell.configure(with: event, selectedIndex: selectedOddIndex)
             cell.onOddTapped = { tappedIndex in
-                // TODO: Handle selection
+                guard let index = tappedIndex else {
+                    self.viewModel.removeBet(for: event.id)
+                    return
+                }
+                self.viewModel.placeBet(for: event, with: event.odds[index])
             }
 
             return cell
@@ -97,6 +126,24 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
                 self?.applySnapshot(events: events)
             }
             .store(in: &cancellables)
+
+        viewModel.updatedIndexes
+            .receive(on: RunLoop.main)
+            .sink { [weak self] items in
+                guard let self, !items.isEmpty else { return }
+
+                var snapshot = self.dataSource.snapshot()
+                snapshot.reloadItems(items)
+                self.dataSource.apply(snapshot, animatingDifferences: false)
+            }
+            .store(in: &cancellables)
+
+        viewModel.$totalBetPrice
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.updateCartButton()
+            }
+            .store(in: &cancellables)
     }
 
     private func applySnapshot(events: [BetEvent]) {
@@ -105,6 +152,20 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
         snapshot.appendItems(events, toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
+
+    // Action when the Cart button is tapped
+        @objc func cartButtonTapped() {
+            // Present the cart view controller modally
+            let cartVC = CartViewController(
+                viewModel: CartViewModel(
+                    betsUseCase: BetsUseCase(
+                        storage: DependencyContainer.shared.betDataStorage
+                    )
+                )
+            )
+            let navigationController = UINavigationController(rootViewController: cartVC)
+            present(navigationController, animated: true, completion: nil)
+        }
 }
 
 extension EventsListViewController: UISearchBarDelegate {
@@ -131,3 +192,17 @@ extension EventsListViewController: UISearchBarDelegate {
     }
 }
 
+extension UIBarButtonItem {
+    convenience init(image: UIImage?, title: String, target: Any?, action: Selector?) {
+        let button = UIButton(type: .custom)
+        button.setImage(image, for: .normal)
+        button.setTitle(title, for: .normal)
+        button.frame = CGRect(x: 0, y: 0, width: image?.size.width ?? 0, height: image?.size.height ?? 0)
+
+        if let target = target, let action = action {
+            button.addTarget(target, action: action, for: .touchUpInside)
+        }
+
+        self.init(customView: button)
+    }
+}

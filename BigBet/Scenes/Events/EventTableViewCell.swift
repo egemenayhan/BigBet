@@ -7,9 +7,9 @@
 
 import UIKit
 
-class OddsTableViewCell: UITableViewCell {
+class EventTableViewCell: UITableViewCell {
 
-    static let identifier = "OddsTableViewCell"
+    static let identifier = "EventTableViewCell"
 
     var onOddTapped: ((Int?) -> Void)?
 
@@ -80,8 +80,6 @@ class OddsTableViewCell: UITableViewCell {
 
         dateLabel.font = .systemFont(ofSize: 12)
         dateLabel.textColor = ThemeManager.current.textSecondary
-        dateLabel.setContentHuggingPriority(.required, for: .horizontal)
-        dateLabel.textAlignment = .right
 
         infoStack.addArrangedSubview(titleLabel)
         infoStack.addArrangedSubview(UIView()) // spacer
@@ -99,11 +97,8 @@ class OddsTableViewCell: UITableViewCell {
 
     // Configure with event + selectedIndex (from ViewModel)
     func configure(with event: BetEvent, selectedIndex: Int?) {
-        titleLabel.text = "\(event.homeTeam) – \(event.awayTeam)"
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        dateLabel.text = formatter.string(from: event.commenceTime)
+        titleLabel.text = event.displayTitle
+        dateLabel.text = event.displayDate
 
         // Clear old buttons
         oddButtons.forEach { $0.removeFromSuperview() }
@@ -130,6 +125,6 @@ class OddsTableViewCell: UITableViewCell {
     @objc private func oddTapped(_ sender: UIButton) {
         guard let tappedIndex = oddButtons.firstIndex(of: sender as! SelectableOddButton) else { return }
         let isAlreadySelected = oddButtons[tappedIndex].isOddSelected
-        onOddTapped?(isAlreadySelected ? -1 : tappedIndex)
+        onOddTapped?(isAlreadySelected ? nil : tappedIndex)
     }
 }

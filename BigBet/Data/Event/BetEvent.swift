@@ -23,6 +23,21 @@ struct BetEvent: Decodable {
     // extracted odds
     let odds: [DisplayOutcome]
 
+    var displayTitle: String {
+        "\(homeTeam) - \(awayTeam)"
+    }
+
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter
+    }()
+
+    var displayDate: String {
+        dateFormatter.string(from: commenceTime)
+    }
+
     private let iso8601Formatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime]
@@ -93,13 +108,13 @@ extension BetEvent: Hashable {
     }
 }
 
-enum MSLabel: String, CaseIterable {
+enum MSLabel: String, CaseIterable, Codable {
     case home = "MS 1"
     case draw = "MS X"
     case away = "MS 2"
 }
 
-struct DisplayOutcome {
+struct DisplayOutcome: Codable, Equatable {
 
     let label: MSLabel
     let teamName: String
