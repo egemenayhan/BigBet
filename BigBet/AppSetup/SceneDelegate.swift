@@ -21,10 +21,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         applyNavigationBarTheme()
 
         /// 3. Create a view hierarchy programmatically
-        let networkManager = NetworkManager(baseURL: "https://api.the-odds-api.com", adapter: AlamofireNetworkAdapter())
+        let networkManager = NetworkManager(
+            baseURL: "https://api.the-odds-api.com",
+            adapter: AlamofireNetworkAdapter()
+        )
         let eventsUseCase = EventsUseCase(networkManager: networkManager)
         let storage = DependencyContainer.shared.betDataStorage
-        let betsUseCase = BetsUseCase(storage: storage)
+        let betsUseCase = BetsUseCase(
+            storage: storage,
+            analyticsUseCase: DependencyContainer.shared.analyticsUsecase
+        )
         let viewModel = EventsListViewModel(eventsUseCase: eventsUseCase, betsUseCase: betsUseCase)
         let viewController = EventsListViewController(viewModel: viewModel)
         let navigation = UINavigationController(rootViewController: viewController)

@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import FirebaseAnalytics
 
 class EventsListViewController: UIViewController, UITableViewDelegate {
 
@@ -45,6 +46,10 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
         bindViewModel()
 
         viewModel.fetchEvents()
+
+//        Analytics.logEvent(AnalyticsEventScreenView, parameters: [
+//            AnalyticsParameterScreenName: Self.description()
+//        ])
     }
 
     private func setupNavigationBar() {
@@ -154,18 +159,19 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
     }
 
     // Action when the Cart button is tapped
-        @objc func cartButtonTapped() {
-            // Present the cart view controller modally
-            let cartVC = CartViewController(
-                viewModel: CartViewModel(
-                    betsUseCase: BetsUseCase(
-                        storage: DependencyContainer.shared.betDataStorage
-                    )
+    @objc func cartButtonTapped() {
+        // Present the cart view controller modally
+        let cartVC = CartViewController(
+            viewModel: CartViewModel(
+                betsUseCase: BetsUseCase(
+                    storage: DependencyContainer.shared.betDataStorage,
+                    analyticsUseCase: DependencyContainer.shared.analyticsUsecase
                 )
             )
-            let navigationController = UINavigationController(rootViewController: cartVC)
-            present(navigationController, animated: true, completion: nil)
-        }
+        )
+        let navigationController = UINavigationController(rootViewController: cartVC)
+        present(navigationController, animated: true, completion: nil)
+    }
 }
 
 extension EventsListViewController: UISearchBarDelegate {
