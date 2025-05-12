@@ -48,23 +48,21 @@ class CartViewController: UIViewController {
     private func bindViewModel() {
         viewModel.$bets
             .receive(on: RunLoop.main)
-            .sink { [weak self] events in
-                self?.applySnapshot()
-            }
-            .store(in: &cancellables)
-
-        viewModel.$totalBetPrice
-            .receive(on: RunLoop.main)
-            .sink { [weak self] in
+            .sink { [weak self] _ in
                 guard let self else { return }
 
-                let formatter = NumberFormatter()
-                formatter.numberStyle = .decimal
-                formatter.maximumFractionDigits = 2
-
-                self.title = "\(self.viewModel.bets.count) Event(s) - Total: \(formatter.string(from: NSNumber(value: $0)) ?? "0.00")"
+                self.applySnapshot()
+                self.updateTitle()
             }
             .store(in: &cancellables)
+    }
+
+    private func updateTitle() {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+
+        title = "\(viewModel.bets.count) Event(s) - Total: \(formatter.string(from: NSNumber(value: viewModel.totalBetPrice)) ?? "0.00")"
     }
 
     // MARK: - TableView Setup
@@ -92,7 +90,7 @@ class CartViewController: UIViewController {
 
     // Configure diffable data source
     private func configureDataSource() {
-        dataSource = CartDataSource(viewModel: viewModel, tableView: tableView) { (tableView, indexPath, bet) -> UITableViewCell in
+        dataSource = CartDataSource(viewModel: viewModel, tableView: tableView) { [weak self] (tableView, indexPath, bet) -> UITableViewCell in
             let cell = tableView.dequeueReusableCell(withIdentifier: BetTableViewCell.identifier, for: indexPath) as! BetTableViewCell
 
             cell.configure(with: bet)
@@ -116,9 +114,11 @@ extension CartViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
-            if let self = self {
-                self.viewModel.removeBet(at: indexPath.row)
+            guard let self = self else {
+                completion(false)
+                return
             }
+            self.viewModel.removeBet(at: indexPath.row)
             completion(true)
         }
 

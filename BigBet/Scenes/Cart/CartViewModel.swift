@@ -14,8 +14,8 @@ final class CartViewModel {
     private let betsUseCase: BetsUseCaseProtocol
 
     @Published var bets: [Bet] = []
-    @Published var totalBetPrice: Double = 0
 
+    private(set) var totalBetPrice: Double = 0
     private var cancellables: Set<AnyCancellable> = []
 
     init(betsUseCase: BetsUseCaseProtocol) {
