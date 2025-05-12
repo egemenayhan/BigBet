@@ -16,6 +16,8 @@ class CartViewController: UIViewController {
     private var viewModel: CartViewModel
     private var tableView: UITableView = UITableView()
 
+    var onEventTap: ((BetEvent) -> Void)?
+
     // Enum to define section type
     enum Section {
         case main
@@ -31,11 +33,14 @@ class CartViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        print("cart deinit")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Register the cell
-        tableView.register(BetTableViewCell.self, forCellReuseIdentifier: BetTableViewCell.identifier)
+        view.backgroundColor = ThemeManager.current.background
 
         // Configure the diffable data source
         configureDataSource()
@@ -75,11 +80,12 @@ class CartViewController: UIViewController {
         // Set the table view's delegate and data source
         tableView.delegate = self
         tableView.dataSource = dataSource
+        tableView.backgroundColor = ThemeManager.current.background
 
         // Add the table view to the main view
         view.addSubview(tableView)
 
-        // Set up constraints
+        // Set up constraintsad
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -111,6 +117,11 @@ class CartViewController: UIViewController {
 }
 
 extension CartViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        onEventTap?(viewModel.bets[indexPath.row].event)
+    }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
