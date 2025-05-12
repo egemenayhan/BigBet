@@ -7,9 +7,8 @@
 
 import UIKit
 import Combine
-import FirebaseAnalytics
 
-class EventsListViewController: UIViewController, UITableViewDelegate {
+class EventsListViewController: UIViewController {
 
     private var tableView: UITableView!
     private var dataSource: UITableViewDiffableDataSource<Section, BetEvent>!
@@ -17,6 +16,7 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
     private var searchBar: UISearchBar!
     private var cartImage = UIImage(systemName: "cart.fill")?
         .applyingSymbolConfiguration(.init(paletteColors: [ThemeManager.current.primaryGreen]))
+    private let analyticsUseCase = DependencyContainer.shared.analyticsUsecase
 
     private let viewModel: EventsListViewModel
 
@@ -46,10 +46,6 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
         bindViewModel()
 
         viewModel.fetchEvents()
-
-//        Analytics.logEvent(AnalyticsEventScreenView, parameters: [
-//            AnalyticsParameterScreenName: Self.description()
-//        ])
     }
 
     private func setupNavigationBar() {
@@ -64,7 +60,7 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
 
         let cartButton = UIBarButtonItem(
             image: cartImage,
-            title: formatter.string(from: viewModel.totalBetPrice as NSNumber) ?? "",//String(format: "%.2f", viewModel.totalBetPrice),
+            title: formatter.string(from: viewModel.totalBetPrice as NSNumber) ?? "",
             target: self,
             action: #selector(cartButtonTapped)
         )
@@ -169,8 +165,38 @@ class EventsListViewController: UIViewController, UITableViewDelegate {
                 )
             )
         )
+        cartVC.onEventTap = { [weak self, weak cartVC] event in
+            cartVC?.dismiss(animated: true) { [weak self] in
+                self?.navigateToEventDetail(event: event)
+            }
+        }
         let navigationController = UINavigationController(rootViewController: cartVC)
         present(navigationController, animated: true, completion: nil)
+    }
+
+    func navigateToEventDetail(event: BetEvent) {
+        let detailViewModel = EventDetailViewModel(
+            event: event,
+            betsUseCase: BetsUseCase(
+                storage: DependencyContainer.shared.betDataStorage,
+                analyticsUseCase: DependencyContainer.shared.analyticsUsecase
+            )
+        )
+        let eventDetailVC = EventDetailViewController(viewModel: detailViewModel)
+        navigationController?.pushViewController(eventDetailVC, animated: true)
+
+        analyticsUseCase.logEvent(.event(.detailTap), parameters: ["id": event.id])
+    }
+}
+
+extension EventsListViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        guard let cell = tableView.cellForRow(at: indexPath) as? EventTableViewCell,
+              let event = cell.event else { return }
+        navigateToEventDetail(event: event)
     }
 }
 
