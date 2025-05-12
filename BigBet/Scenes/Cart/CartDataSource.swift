@@ -30,14 +30,4 @@ class CartDataSource: UITableViewDiffableDataSource<CartSection, Bet> {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-
-//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
-//            if let self = self {
-//                self.viewModel.removeBet(at: indexPath.row)
-//            }
-//            completion(true)
-//        }
-//        return UISwipeActionsConfiguration(actions: [deleteAction])
-//    }
 }
