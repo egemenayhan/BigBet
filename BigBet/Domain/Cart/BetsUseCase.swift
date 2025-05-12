@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import FirebaseAnalytics
 
 protocol BetsUseCaseProtocol {
 
@@ -22,13 +23,15 @@ protocol BetsUseCaseProtocol {
 
 final class BetsUseCase: BetsUseCaseProtocol {
 
+    private let analyticsUseCase: AnalyticsUseCaseProtocol
     private let storage: BetStorageProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     var totalBetPrice = CurrentValueSubject<Double, Never>(0)
 
-    init(storage: BetStorageProtocol) {
+    init(storage: BetStorageProtocol, analyticsUseCase: AnalyticsUseCaseProtocol) {
         self.storage = storage
+        self.analyticsUseCase = analyticsUseCase
 
         bindTotalBetPrice()
 
@@ -69,10 +72,26 @@ final class BetsUseCase: BetsUseCaseProtocol {
 
     func placeBet(_ bet: Bet) {
         storage.addBet(bet)
+
+        analyticsUseCase.logEvent(
+            .cart(.add),
+            parameters: [
+                "id": bet.event.id,
+                "name": bet.event.displayTitle,
+                "value": bet.odd.label.rawValue
+            ]
+        )
     }
 
     func removeBetForEvent(id: String) {
         storage.removeBetForEvent(id: id)
+
+        analyticsUseCase.logEvent(
+            .cart(.remove),
+            parameters: [
+                "id": id
+            ]
+        )
     }
 
     func getBetForEvent(id: String) -> Bet? {

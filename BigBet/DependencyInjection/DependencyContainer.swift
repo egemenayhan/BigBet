@@ -11,5 +11,8 @@ struct DependencyContainer {
 
     static let shared = DependencyContainer()
 
-    var betDataStorage = BetDataStorage()
+    let betDataStorage = BetDataStorage()
+    let analyticsUsecase: AnalyticsUseCaseProtocol = AnalyticsUseCase(
+        providers: [FirebaseAnalyticsProvider()]
+    )
 }
