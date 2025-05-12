@@ -54,6 +54,28 @@ struct BetEvent: Decodable {
         case bookmakers
     }
 
+    init(
+        id: String,
+        sportKey: String,
+        sportTitle: String,
+        commenceTime: Date,
+        homeTeam: String,
+        awayTeam: String,
+        bookmakers: [Bookmaker],
+        h2hOutcomes: [Outcome],
+        odds: [DisplayOutcome]
+    ) {
+        self.id = id
+        self.sportKey = sportKey
+        self.sportTitle = sportTitle
+        self.commenceTime = commenceTime
+        self.homeTeam = homeTeam
+        self.awayTeam = awayTeam
+        self.bookmakers = bookmakers
+        self.h2hOutcomes = h2hOutcomes
+        self.odds = odds
+    }
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
