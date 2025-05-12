@@ -120,6 +120,7 @@ class EventsListViewController: UIViewController {
         }
     }
 
+    // Observing changes on view model
     private func bindViewModel() {
         viewModel.$events
             .receive(on: RunLoop.main)
@@ -145,6 +146,16 @@ class EventsListViewController: UIViewController {
                 self?.updateCartButton()
             }
             .store(in: &cancellables)
+
+        // Error handling
+        viewModel.errorSubject
+            .receive(on: RunLoop.main)
+            .sink { [weak self] errorMessage in
+            let alertController = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .default))
+            self?.present(alertController, animated: true)
+        }
+        .store(in: &cancellables)
     }
 
     private func applySnapshot(events: [BetEvent]) {
