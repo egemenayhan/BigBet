@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7BD6BF912DD1E33800740476 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7BD6BF902DD1E33800740476 /* FirebaseAnalytics */; };
+		7BD6BF932DD1E33800740476 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7BD6BF922DD1E33800740476 /* FirebaseCrashlytics */; };
+		7BD6BF962DD1E34F00740476 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7BD6BF952DD1E34F00740476 /* Alamofire */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		7B2E84A82DCE335200E7AAC1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -30,10 +36,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7B2E84B92DCE335200E7AAC1 /* Exceptions for "BigBet" folder in "BigBet" target */ = {
+		7B9912AD2DD0B53300A782ED /* Exceptions for "BigBet" folder in "BigBet" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				AppSetup/Info.plist,
 			);
 			target = 7B2E84902DCE335000E7AAC1 /* BigBet */;
 		};
@@ -43,7 +49,7 @@
 		7B2E84932DCE335000E7AAC1 /* BigBet */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				7B2E84B92DCE335200E7AAC1 /* Exceptions for "BigBet" folder in "BigBet" target */,
+				7B9912AD2DD0B53300A782ED /* Exceptions for "BigBet" folder in "BigBet" target */,
 			);
 			path = BigBet;
 			sourceTree = "<group>";
@@ -65,6 +71,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BD6BF962DD1E34F00740476 /* Alamofire in Frameworks */,
+				7BD6BF912DD1E33800740476 /* FirebaseAnalytics in Frameworks */,
+				7BD6BF932DD1E33800740476 /* FirebaseCrashlytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +134,9 @@
 			);
 			name = BigBet;
 			packageProductDependencies = (
+				7BD6BF902DD1E33800740476 /* FirebaseAnalytics */,
+				7BD6BF922DD1E33800740476 /* FirebaseCrashlytics */,
+				7BD6BF952DD1E34F00740476 /* Alamofire */,
 			);
 			productName = BigBet;
 			productReference = 7B2E84912DCE335000E7AAC1 /* BigBet.app */;
@@ -208,6 +220,10 @@
 			);
 			mainGroup = 7B2E84882DCE335000E7AAC1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7BD6BF8F2DD1E33800740476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				7BD6BF942DD1E34F00740476 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7B2E84922DCE335000E7AAC1 /* Products */;
 			projectDirPath = "";
@@ -291,11 +307,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YDABZ672Z5;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BigBet/Info.plist;
+				INFOPLIST_FILE = BigBet/AppSetup/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -318,11 +333,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YDABZ672Z5;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BigBet/Info.plist;
+				INFOPLIST_FILE = BigBet/AppSetup/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -393,6 +407,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -449,6 +464,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
@@ -567,6 +583,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7BD6BF8F2DD1E33800740476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.12.0;
+			};
+		};
+		7BD6BF942DD1E34F00740476 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7BD6BF902DD1E33800740476 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7BD6BF8F2DD1E33800740476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		7BD6BF922DD1E33800740476 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7BD6BF8F2DD1E33800740476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		7BD6BF952DD1E34F00740476 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7BD6BF942DD1E34F00740476 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7B2E84892DCE335000E7AAC1 /* Project object */;
 }

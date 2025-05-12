@@ -11,7 +11,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         /// 1. Capture the scene
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -19,8 +18,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         /// 2. Create a new UIWindow using the windowScene constructor which takes in a window scene.
         let window = UIWindow(windowScene: windowScene)
 
+        applyNavigationBarTheme()
+
         /// 3. Create a view hierarchy programmatically
-        let viewController = ViewController()
+        let networkManager = NetworkManager(
+            baseURL: "https://api.the-odds-api.com",
+            adapter: AlamofireNetworkAdapter()
+        )
+        let eventsUseCase = EventsUseCase(networkManager: networkManager)
+        let storage = DependencyContainer.shared.betDataStorage
+        let betsUseCase = BetsUseCase(
+            storage: storage,
+            analyticsUseCase: DependencyContainer.shared.analyticsUsecase
+        )
+        let viewModel = EventsListViewModel(eventsUseCase: eventsUseCase, betsUseCase: betsUseCase)
+        let viewController = EventsListViewController(viewModel: viewModel)
         let navigation = UINavigationController(rootViewController: viewController)
 
         /// 4. Set the root view controller of the window with your view controller
@@ -59,6 +71,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    func applyNavigationBarTheme() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = ThemeManager.current.navBarBackgroundColor
+        appearance.titleTextAttributes = [.foregroundColor: ThemeManager.current.navBarTitleColor]
+        appearance.largeTitleTextAttributes = [.foregroundColor: ThemeManager.current.navBarTitleColor]
 
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().tintColor = ThemeManager.current.navBarTintColor // back arrow, buttons
+
+        // Apply immediately if you're inside a view controller
+        UINavigationBar.appearance() .barStyle = ThemeManager.current == .light ? .default : .black
+    }
 }
 
