@@ -11,10 +11,9 @@ import Combine
 @MainActor
 final class CartViewModel {
 
-    private let betsUseCase: BetsUseCaseProtocol
-
     @Published var bets: [Bet] = []
 
+    private let betsUseCase: BetsUseCaseProtocol
     private(set) var totalBetPrice: Double = 0
     private var cancellables: Set<AnyCancellable> = []
 

@@ -10,8 +10,8 @@ import Combine
 
 protocol BetStorageProtocol {
 
-    var betsSubject: PassthroughSubject<[Bet], Never> { get }
-    var betUpdateSubject: PassthroughSubject<Bet, Never> { get }
+    var betsSubject: PassthroughSubject<[Bet], Never> { get } // array changes
+    var betUpdateSubject: PassthroughSubject<Bet, Never> { get } // single bet changes
 
     func getAllBets() -> [Bet]
     func addBet(_ bet: Bet)
@@ -21,8 +21,11 @@ protocol BetStorageProtocol {
 
 final class BetDataStorage: BetStorageProtocol {
 
+    // Used both array and dictionary because I want to provide O(1) complexity for lookups. Array is just for keeping order.
     private var betsArray: [String] = []
     private var betsDictionary: [String: Bet] = [:]
+
+    // to prevent race conditions in data storage
     private let queue = DispatchQueue(label: "BetDataStorageQueue", attributes: .concurrent)
 
     var betsSubject = PassthroughSubject<[Bet], Never>()
@@ -40,7 +43,7 @@ final class BetDataStorage: BetStorageProtocol {
 
             let eventId = bet.event.id
 
-            // If no bet exists, add directly. If replacing, move the bet to the end of the array.
+            // If no bet exists, add directly. If replacing, move the bet to the end of the array to keep correct update order.
             if self.betsDictionary[eventId] == nil {
                 self.betsDictionary[eventId] = bet
                 self.betsArray.append(eventId)

@@ -50,26 +50,6 @@ class CartViewController: UIViewController {
         applySnapshot()
     }
 
-    private func bindViewModel() {
-        viewModel.$bets
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-
-                self.applySnapshot()
-                self.updateTitle()
-            }
-            .store(in: &cancellables)
-    }
-
-    private func updateTitle() {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-
-        title = "\(viewModel.bets.count) Event(s) - Total: \(formatter.string(from: NSNumber(value: viewModel.totalBetPrice)) ?? "0.00")"
-    }
-
     // MARK: - TableView Setup
     private func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -109,10 +89,31 @@ class CartViewController: UIViewController {
         }
     }
 
+    private func bindViewModel() {
+        viewModel.$bets
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+
+                self.applySnapshot()
+                self.updateTitle()
+            }
+            .store(in: &cancellables)
+    }
+
+
     // Apply snapshot to update data
     private func applySnapshot() {
         let snapshot = dataSource.generateSnapshot()
         dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
+    private func updateTitle() {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+
+        title = "\(viewModel.bets.count) Event(s) - Total: \(formatter.string(from: NSNumber(value: viewModel.totalBetPrice)) ?? "0.00")"
     }
 }
 

@@ -7,6 +7,7 @@
 
 import Foundation
 
+// Using singleton container to make dependency injection without mess
 struct DependencyContainer {
 
     static let shared = DependencyContainer()

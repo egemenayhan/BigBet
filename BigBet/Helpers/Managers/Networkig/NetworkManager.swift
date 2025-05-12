@@ -9,6 +9,7 @@ import Foundation
 import Alamofire
 
 protocol NetworkService {
+
     func request<T: APIRequest>(_ request: T) async throws -> T.Response
 }
 

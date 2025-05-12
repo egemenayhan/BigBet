@@ -6,6 +6,7 @@
 //
 
 protocol EventsUseCaseProtocol {
+
     func fetchEvents() async throws -> [BetEvent]
 }
 

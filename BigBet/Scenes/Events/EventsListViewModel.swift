@@ -13,7 +13,7 @@ final class EventsListViewModel {
     @Published var events: [BetEvent] = []
     @Published var totalBetPrice: Double = 0
 
-    var updatedIndexes = PassthroughSubject<[BetEvent], Never>()
+    var updatedEvents = PassthroughSubject<[BetEvent], Never>()
     var errorSubject = PassthroughSubject<String, Never>()
 
     private let eventsUseCase: EventsUseCaseProtocol
@@ -32,9 +32,10 @@ final class EventsListViewModel {
             .receive(on: RunLoop.main)
             .sink { [weak self] bet in
                 guard let self else { return }
-                self.updatedIndexes.send([bet.event])
+                self.updatedEvents.send([bet.event])
             }
             .store(in: &cancellables)
+
         betsUseCase.totalBetPrice
             .receive(on: RunLoop.main)
             .sink { [weak self] price in

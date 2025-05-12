@@ -27,6 +27,7 @@ class CartDataSource: UITableViewDiffableDataSource<CartSection, Bet> {
         return snapshot
     }
 
+    // Enable swipe to delete
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }

@@ -10,9 +10,9 @@ import Combine
 
 protocol BetsUseCaseProtocol {
 
-    var betsSubject: PassthroughSubject<[Bet], Never> { get }
-    var betUpdateSubject: PassthroughSubject<Bet, Never> { get }
-    var totalBetPrice: CurrentValueSubject<Double, Never> { get }
+    var betsSubject: PassthroughSubject<[Bet], Never> { get } // array updates
+    var betUpdateSubject: PassthroughSubject<Bet, Never> { get } // single bet changes
+    var totalBetPrice: CurrentValueSubject<Double, Never> { get } // cart total updates
 
     func getAllBets() -> [Bet]
     func placeBet(_ bet: Bet)

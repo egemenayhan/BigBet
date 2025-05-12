@@ -48,24 +48,11 @@ class EventsListViewController: UIViewController {
         viewModel.fetchEvents()
     }
 
+    // MARK: - UI setup
+
     private func setupNavigationBar() {
         title = "BigBet"
         updateCartButton()
-    }
-
-    func updateCartButton() {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-
-        let cartButton = UIBarButtonItem(
-            image: cartImage,
-            title: formatter.string(from: viewModel.totalBetPrice as NSNumber) ?? "",
-            target: self,
-            action: #selector(cartButtonTapped)
-        )
-
-        navigationItem.rightBarButtonItem = cartButton
     }
 
     private func setupTableView() {
@@ -120,6 +107,8 @@ class EventsListViewController: UIViewController {
         }
     }
 
+    // MARK: - View Model Observers
+
     // Observing changes on view model
     private func bindViewModel() {
         viewModel.$events
@@ -129,7 +118,7 @@ class EventsListViewController: UIViewController {
             }
             .store(in: &cancellables)
 
-        viewModel.updatedIndexes
+        viewModel.updatedEvents
             .receive(on: RunLoop.main)
             .sink { [weak self] items in
                 guard let self, !items.isEmpty else { return }
@@ -158,12 +147,31 @@ class EventsListViewController: UIViewController {
         .store(in: &cancellables)
     }
 
+    // MARK: - UI updates
+
+    func updateCartButton() {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+
+        let cartButton = UIBarButtonItem(
+            image: cartImage,
+            title: formatter.string(from: viewModel.totalBetPrice as NSNumber) ?? "",
+            target: self,
+            action: #selector(cartButtonTapped)
+        )
+
+        navigationItem.rightBarButtonItem = cartButton
+    }
+
     private func applySnapshot(events: [BetEvent]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, BetEvent>()
         snapshot.appendSections([.main])
         snapshot.appendItems(events, toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
+
+    // MARK: - Navigation actions
 
     // Action when the Cart button is tapped
     @objc func cartButtonTapped() {
@@ -202,6 +210,7 @@ class EventsListViewController: UIViewController {
 
 extension EventsListViewController: UITableViewDelegate {
 
+    // Navigates to detail on cell tap
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
@@ -232,20 +241,5 @@ extension EventsListViewController: UISearchBarDelegate {
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         guard searchBar.text?.isEmpty ?? true else { return }
         searchBar.showsCancelButton = true
-    }
-}
-
-extension UIBarButtonItem {
-    convenience init(image: UIImage?, title: String, target: Any?, action: Selector?) {
-        let button = UIButton(type: .custom)
-        button.setImage(image, for: .normal)
-        button.setTitle(title, for: .normal)
-        button.frame = CGRect(x: 0, y: 0, width: image?.size.width ?? 0, height: image?.size.height ?? 0)
-
-        if let target = target, let action = action {
-            button.addTarget(target, action: action, for: .touchUpInside)
-        }
-
-        self.init(customView: button)
     }
 }

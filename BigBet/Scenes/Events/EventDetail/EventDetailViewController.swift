@@ -28,19 +28,18 @@ class EventDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         setupViews()
         setupCardViewObservation()
         configureCardView(selectedOddIndex: viewModel.selectedOddIndex)
     }
 
     private func setupViews() {
-        // Set the background color or any style for the view
         view.backgroundColor = ThemeManager.current.background
 
-        // Add EventCardView to the screen
+        eventCardView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(eventCardView)
 
-        eventCardView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             eventCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             eventCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),

@@ -15,7 +15,6 @@ class BetTableViewCell: UITableViewCell {
     private let dateLabel = UILabel()
     private let betOutcomeLabel = UILabel()
     private let deleteButton = UIButton()
-    private var bet: Bet?
 
     var onDelete: (() -> Void)?
 
@@ -32,7 +31,8 @@ class BetTableViewCell: UITableViewCell {
 
     private func setupUI() {
         selectionStyle = .none
-        
+        contentView.backgroundColor = ThemeManager.current.cardBackground
+
         // Configure labels
         teamLabel.font = ThemeManager.current.titleFont
         dateLabel.font = ThemeManager.current.detailFont
@@ -42,13 +42,6 @@ class BetTableViewCell: UITableViewCell {
         // Configure text color based on the theme
         teamLabel.textColor = ThemeManager.current.textPrimary
         dateLabel.textColor = ThemeManager.current.textSecondary
-
-        // Set background color of cell and card appearance
-        contentView.backgroundColor = ThemeManager.current.cardBackground
-        contentView.layer.shadowColor = ThemeManager.current.cardShadowColor.cgColor
-        contentView.layer.shadowOpacity = 1
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        contentView.layer.shadowRadius = 3
 
         // Configure delete button
         deleteButton.setImage(UIImage(systemName: "trash.fill"), for: .normal)
