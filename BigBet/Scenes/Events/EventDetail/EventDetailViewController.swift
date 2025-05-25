@@ -7,12 +7,13 @@
 
 
 import UIKit
-import Combine
+import RxSwift
+import RxCocoa
 
 class EventDetailViewController: UIViewController {
 
     private let eventCardView = EventCardView()
-    private var cancellables: Set<AnyCancellable> = []
+    private let disposeBag = DisposeBag()
 
     let viewModel: EventDetailViewModel
 
@@ -31,7 +32,7 @@ class EventDetailViewController: UIViewController {
 
         setupViews()
         setupCardViewObservation()
-        configureCardView(selectedOddIndex: viewModel.selectedOddIndex)
+        configureCardView(selectedOddIndex: viewModel.selectedOddIndex.value)
     }
 
     private func setupViews() {
@@ -53,11 +54,12 @@ class EventDetailViewController: UIViewController {
     }
 
     private func setupCardViewObservation() {
-        viewModel.$selectedOddIndex
-            .sink { [weak self] index in
+        viewModel.selectedOddIndex
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] index in
                 self?.configureCardView(selectedOddIndex: index)
-            }
-            .store(in: &cancellables)
+            })
+            .disposed(by: disposeBag)
 
         eventCardView.onOddTapped = { [weak self] tappedIndex in
             guard let self, let index = tappedIndex else {

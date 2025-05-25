@@ -59,9 +59,11 @@ class EventCardView: UIView {
 
         titleLabel.font = .boldSystemFont(ofSize: 14)
         titleLabel.textColor = ThemeManager.current.textPrimary
+        titleLabel.numberOfLines = 0
 
         dateLabel.font = .systemFont(ofSize: 12)
         dateLabel.textColor = ThemeManager.current.textSecondary
+        dateLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         infoStack.addArrangedSubview(titleLabel)
         infoStack.addArrangedSubview(UIView()) // spacer

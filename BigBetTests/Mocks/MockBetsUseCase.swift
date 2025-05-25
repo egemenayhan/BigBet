@@ -5,19 +5,20 @@
 //  Created by Egemen Ayhan on 12.05.2025.
 //
 
-import Combine
+import RxSwift
+import RxRelay
 @testable import BigBet
 
 class MockBetsUseCase: BetsUseCaseProtocol {
     private var storage: MockBetStorage
     private var analyticsUseCase: MockAnalyticsUseCase
-    private var cancellables = Set<AnyCancellable>()
+    private let disposeBag = DisposeBag()
     
-    var totalBetPrice = CurrentValueSubject<Double, Never>(0)
-    var betsSubject: PassthroughSubject<[Bet], Never> {
+    var totalBetPrice = BehaviorRelay<Double>(value: 0)
+    var betsSubject: PublishRelay<[Bet]> {
         return storage.betsSubject
     }
-    var betUpdateSubject: PassthroughSubject<Bet, Never> {
+    var betUpdateSubject: PublishRelay<Bet> {
         return storage.betUpdateSubject
     }
 
@@ -26,15 +27,15 @@ class MockBetsUseCase: BetsUseCaseProtocol {
         self.analyticsUseCase = analyticsUseCase
 
         storage.betsSubject
-            .sink { [weak self] bets in
+            .subscribe(onNext: { [weak self] bets in
                 self?.calculateTotalBetPrice(bets: bets)
-            }
-            .store(in: &cancellables)
+            })
+            .disposed(by: disposeBag)
     }
 
     private func calculateTotalBetPrice(bets: [Bet]) {
-        totalBetPrice.value = bets.reduce(1) { $0 * $1.odd.price }
-        totalBetPrice.send(totalBetPrice.value)
+        let newValue = bets.reduce(1) { $0 * $1.odd.price }
+        totalBetPrice.accept(newValue)
     }
 
     func getAllBets() -> [Bet] {
