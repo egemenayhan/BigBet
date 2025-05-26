@@ -6,19 +6,22 @@
 //
 
 import UIKit
-import Combine
+import RxSwift
+import RxCocoa
 
 class EventsListViewController: UIViewController {
 
     private var tableView: UITableView!
     private var dataSource: UITableViewDiffableDataSource<Section, BetEvent>!
-    private var cancellables = Set<AnyCancellable>()
     private var searchBar: UISearchBar!
     private var cartImage = UIImage(systemName: "cart.fill")?
         .applyingSymbolConfiguration(.init(paletteColors: [ThemeManager.current.primaryGreen]))
+
     private let analyticsUseCase = DependencyContainer.shared.analyticsUsecase
 
+    private let disposeBag = DisposeBag()
     private let viewModel: EventsListViewModel
+    private var didBindViewModel = false
 
     enum Section {
         case main
@@ -42,10 +45,15 @@ class EventsListViewController: UIViewController {
         setupNavigationBar()
         setupTableView()
         setupSearchBar()
-        configureDataSource()
-        bindViewModel()
 
         viewModel.fetchEvents()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // Binding on appear because if we do it on did load binding triggers tableview load before it is in view hierarchy which gives warning. If we skip first onNext then cells` first load has weird animation so this is quick fix to the problem. This problem ocurred after switching from combine.
+        bindViewModel()
     }
 
     // MARK: - UI setup
@@ -58,10 +66,19 @@ class EventsListViewController: UIViewController {
     private func setupTableView() {
         tableView = UITableView(frame: view.bounds, style: .plain)
         tableView.delegate = self
-        tableView.autoresizingMask = [.flexibleHeight]
         tableView.register(EventTableViewCell.self, forCellReuseIdentifier: EventTableViewCell.identifier)
         tableView.backgroundColor = ThemeManager.current.background
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+
         view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+
+        configureDataSource()
     }
 
     private func setupSearchBar() {
@@ -111,40 +128,44 @@ class EventsListViewController: UIViewController {
 
     // Observing changes on view model
     private func bindViewModel() {
-        viewModel.$events
-            .receive(on: RunLoop.main)
-            .sink { [weak self] events in
+        guard !didBindViewModel else { return }
+
+        didBindViewModel = true
+
+        viewModel.events
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] events in
                 self?.applySnapshot(events: events)
-            }
-            .store(in: &cancellables)
+            })
+            .disposed(by: disposeBag)
 
         viewModel.updatedEvents
-            .receive(on: RunLoop.main)
-            .sink { [weak self] items in
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] items in
                 guard let self, !items.isEmpty else { return }
 
                 var snapshot = self.dataSource.snapshot()
                 snapshot.reloadItems(items)
                 self.dataSource.apply(snapshot, animatingDifferences: false)
-            }
-            .store(in: &cancellables)
+            })
+            .disposed(by: disposeBag)
 
-        viewModel.$totalBetPrice
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
+        viewModel.totalBetPrice
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
                 self?.updateCartButton()
-            }
-            .store(in: &cancellables)
+            })
+            .disposed(by: disposeBag)
 
         // Error handling
         viewModel.errorSubject
-            .receive(on: RunLoop.main)
-            .sink { [weak self] errorMessage in
-            let alertController = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .default))
-            self?.present(alertController, animated: true)
-        }
-        .store(in: &cancellables)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] errorMessage in
+                let alertController = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default))
+                self?.present(alertController, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
 
     // MARK: - UI updates
@@ -156,7 +177,7 @@ class EventsListViewController: UIViewController {
 
         let cartButton = UIBarButtonItem(
             image: cartImage,
-            title: formatter.string(from: viewModel.totalBetPrice as NSNumber) ?? "",
+            title: formatter.string(from: viewModel.totalBetPrice.value as NSNumber) ?? "",
             target: self,
             action: #selector(cartButtonTapped)
         )
@@ -231,7 +252,7 @@ extension EventsListViewController: UISearchBarDelegate {
         searchBar.text = ""
         searchBar.resignFirstResponder()
         searchBar.showsCancelButton = false
-        applySnapshot(events: viewModel.events)
+        applySnapshot(events: viewModel.events.value)
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

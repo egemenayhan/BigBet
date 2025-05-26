@@ -6,13 +6,13 @@
 //
 
 import UIKit
-import Combine
+import RxSwift
+import RxCocoa
 
 class CartViewController: UIViewController {
-
     // Diffable data source
     private var dataSource: CartDataSource!
-    private var cancellables = Set<AnyCancellable>()
+    private let disposeBag = DisposeBag()
     private var viewModel: CartViewModel
     private var tableView: UITableView = UITableView()
 
@@ -25,7 +25,6 @@ class CartViewController: UIViewController {
 
     init(viewModel: CartViewModel) {
         self.viewModel = viewModel
-
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -90,17 +89,15 @@ class CartViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        viewModel.$bets
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
+        viewModel.bets
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
                 guard let self else { return }
-
                 self.applySnapshot()
                 self.updateTitle()
-            }
-            .store(in: &cancellables)
+            })
+            .disposed(by: disposeBag)
     }
-
 
     // Apply snapshot to update data
     private func applySnapshot() {
@@ -113,15 +110,14 @@ class CartViewController: UIViewController {
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 2
 
-        title = "\(viewModel.bets.count) Event(s) - Total: \(formatter.string(from: NSNumber(value: viewModel.totalBetPrice)) ?? "0.00")"
+        title = "\(viewModel.bets.value.count) Event(s) - Total: \(formatter.string(from: NSNumber(value: viewModel.totalBetPrice)) ?? "0.00")"
     }
 }
 
 extension CartViewController: UITableViewDelegate {
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        onEventTap?(viewModel.bets[indexPath.row].event)
+        onEventTap?(viewModel.bets.value[indexPath.row].event)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

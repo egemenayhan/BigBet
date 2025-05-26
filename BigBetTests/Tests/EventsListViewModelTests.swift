@@ -6,7 +6,9 @@
 //
 
 import XCTest
-import Combine
+import RxSwift
+import RxTest
+import RxBlocking
 @testable import BigBet
 
 class EventsListViewModelTests: XCTestCase {
@@ -15,11 +17,14 @@ class EventsListViewModelTests: XCTestCase {
     var mockBetsUseCase: MockBetsUseCase!
     var mockEventsUseCase: MockEventsUseCase!
     var mockNetworkService: MockNetworkService!
-    var cancellables: Set<AnyCancellable> = []
+    private var disposeBag: DisposeBag!
+    private var scheduler: TestScheduler!
 
     override func setUp() {
         super.setUp()
 
+        disposeBag = DisposeBag()
+        scheduler = TestScheduler(initialClock: 0)
         mockNetworkService = MockNetworkService()
 
         let mockNetworkService = MockNetworkService()
@@ -36,7 +41,8 @@ class EventsListViewModelTests: XCTestCase {
         viewModel = nil
         mockBetsUseCase = nil
         mockEventsUseCase = nil
-        cancellables = []
+        disposeBag = nil
+        scheduler = nil
         super.tearDown()
     }
 
@@ -44,13 +50,13 @@ class EventsListViewModelTests: XCTestCase {
     func testFetchEventsSuccess() {
         let expectation = self.expectation(description: "Events fetched")
 
-        viewModel.$events
-            .dropFirst()
-            .sink { events in
+        viewModel.events
+            .skip(1)
+            .subscribe(onNext: { events in
                 XCTAssertFalse(events.isEmpty, "Events should not be empty")
                 expectation.fulfill()
-            }
-            .store(in: &cancellables)
+            })
+            .disposed(by: disposeBag)
 
         viewModel.fetchEvents()
         waitForExpectations(timeout: 2, handler: nil)
@@ -65,11 +71,11 @@ class EventsListViewModelTests: XCTestCase {
         let expectation = self.expectation(description: "Error handled")
 
         viewModel.errorSubject
-            .sink { errorMessage in
+            .subscribe(onNext: { errorMessage in
                 XCTAssertEqual(errorMessage, "The operation couldn’t be completed. (Mock error error 0.)", "Error should be handled correctly")
                 expectation.fulfill()
-            }
-            .store(in: &cancellables)
+            })
+            .disposed(by: disposeBag)
 
         viewModel.fetchEvents()
         waitForExpectations(timeout: 2, handler: nil)
@@ -77,10 +83,10 @@ class EventsListViewModelTests: XCTestCase {
 
     // Test if the filter works for events
     func testFilterEvents() {
-        viewModel.events = [
+        viewModel.events.accept([
             BetEvent.mock(id: "1", homeTeam: "Home 1", awayTeam: "Away 1"),
             BetEvent.mock(id: "2", homeTeam: "Home 2", awayTeam: "Away 2")
-        ]
+        ])
 
         let filteredEvents = viewModel.filterEvents(for: "Home 1")
         XCTAssertEqual(filteredEvents.count, 1, "There should be only 1 event after filtering")
