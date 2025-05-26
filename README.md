@@ -16,4 +16,4 @@ Features:
 - Color theme support
 
 Used MVVM with clean architecture.
-Made it reactive when possible with combine.
+Made it reactive when possible with RXSwift.
