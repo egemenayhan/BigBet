@@ -53,17 +53,17 @@ final class AlamofireNetworkAdapter: NetworkAdapter {
 
     private func mapMethod(_ method: HTTPMethodType) -> HTTPMethod {
         switch method {
-        case .get: return .get
-        case .post: return .post
-        case .put: return .put
-        case .delete: return .delete
+        case .get: .get
+        case .post: .post
+        case .put: .put
+        case .delete: .delete
         }
     }
 
     private func mapEncoding(_ encoding: ParameterEncodingType) -> ParameterEncoding {
         switch encoding {
-            case .url: return URLEncoding.default
-            case .json: return JSONEncoding.default
+            case .url: URLEncoding.default
+            case .json: JSONEncoding.default
         }
     }
 }

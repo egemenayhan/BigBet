@@ -51,13 +51,13 @@ class BetTableViewCell: UITableViewCell {
         // Horizontal stack view for team and date
         let teamDateStackView = UIStackView(arrangedSubviews: [teamLabel, UIView(), dateLabel])
         teamDateStackView.axis = .horizontal
-        teamDateStackView.spacing = 8
+        teamDateStackView.spacing = AppConstants.UI.smallPadding
         teamDateStackView.alignment = .center
         teamDateStackView.distribution = .fill
 
         let detailStackView = UIStackView(arrangedSubviews: [betOutcomeLabel, UIView(), deleteButton])
         detailStackView.axis = .horizontal
-        detailStackView.spacing = 8
+        detailStackView.spacing = AppConstants.UI.smallPadding
         detailStackView.alignment = .center
         detailStackView.distribution = .fill
 
@@ -74,18 +74,19 @@ class BetTableViewCell: UITableViewCell {
 
         // Constraints for main stack view and delete button
         NSLayoutConstraint.activate([
-            mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppConstants.UI.defaultPadding),
+            mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AppConstants.UI.cellVerticalPadding),
+            mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppConstants.UI.cellVerticalPadding),
+            mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppConstants.UI.defaultPadding)
         ])
     }
 
     // Configure the cell with data
     func configure(with bet: Bet) {
         teamLabel.text = bet.event.displayTitle
-        dateLabel.text = bet.event.displayDate
-        betOutcomeLabel.text = "\(bet.odd.label.rawValue) - \(bet.odd.price)"
+        dateLabel.text = bet.event.timeUntilEvent
+        betOutcomeLabel.text = bet.displayOutcome
+        betOutcomeLabel.textColor = bet.outcomeColor
     }
 
     @objc func deleteTapped() {

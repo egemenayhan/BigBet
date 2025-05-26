@@ -33,6 +33,6 @@ final class NetworkManager: NetworkService {
     }
 
     func request<T: APIRequest>(_ request: T) async throws -> T.Response {
-        return try await adapter.perform(request, baseURL: baseURL)
+        try await adapter.perform(request, baseURL: baseURL)
     }
 }

@@ -110,7 +110,11 @@ class CartViewController: UIViewController {
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 2
 
-        title = "\(viewModel.bets.value.count) Event(s) - Total: \(formatter.string(from: NSNumber(value: viewModel.totalBetPrice)) ?? "0.00")"
+        let price = String(
+            format: "%.\(AppConstants.Formatting.priceDecimalPlaces)f", viewModel.totalBetPrice
+        )
+
+        title = "\(viewModel.bets.value.count) Event(s) - Total: " + price
     }
 }
 

@@ -48,22 +48,23 @@ final class EventsListViewModel {
         Task {
             do {
                 let fetchedEvents = try await self.eventsUseCase.fetchEvents()
-                self.events.accept(fetchedEvents)
+                await MainActor.run {
+                    self.events.accept(fetchedEvents)
+                }
             } catch {
-                print("Error fetching events: \(error)")
-                errorSubject.accept(error.localizedDescription)
+                await MainActor.run {
+                    print("Error fetching events: \(error)")
+                    self.errorSubject.accept(error.localizedDescription)
+                }
             }
         }
     }
 
     func filterEvents(for text: String) -> [BetEvent] {
         if text.isEmpty {
-            return events.value
+            events.value
         } else {
-            return events.value.filter {
-                $0.homeTeam.localizedCaseInsensitiveContains(text) ||
-                $0.awayTeam.localizedCaseInsensitiveContains(text)
-            }
+            events.value.filter { $0.matches(searchText: text) }
         }
     }
 

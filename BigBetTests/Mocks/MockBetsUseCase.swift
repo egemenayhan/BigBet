@@ -10,16 +10,20 @@ import RxRelay
 @testable import BigBet
 
 class MockBetsUseCase: BetsUseCaseProtocol {
+    
     private var storage: MockBetStorage
     private var analyticsUseCase: MockAnalyticsUseCase
     private let disposeBag = DisposeBag()
     
     var totalBetPrice = BehaviorRelay<Double>(value: 0)
     var betsSubject: PublishRelay<[Bet]> {
-        return storage.betsSubject
+        storage.betsSubject
     }
     var betUpdateSubject: PublishRelay<Bet> {
-        return storage.betUpdateSubject
+        storage.betUpdateSubject
+    }
+    var bets: [BigBet.Bet] {
+        storage.getAllBets()
     }
 
     init(storage: MockBetStorage, analyticsUseCase: MockAnalyticsUseCase) {
