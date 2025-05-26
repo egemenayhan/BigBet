@@ -21,7 +21,7 @@ final class CartViewModel {
         self.betsUseCase = betsUseCase
         bind()
         
-        bets.accept(betsUseCase.getAllBets())
+        bets.accept(betsUseCase.bets)
         totalBetPrice = betsUseCase.totalBetPrice.value
     }
 

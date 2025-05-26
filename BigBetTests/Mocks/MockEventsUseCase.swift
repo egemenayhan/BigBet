@@ -15,6 +15,6 @@ class MockEventsUseCase: EventsUseCaseProtocol {
     }
 
     func fetchEvents() async throws -> [BetEvent] {
-        return try await networkManager.request(OddsRequest(sportKey: "soccer_turkey_super_league"))
+        try await networkManager.request(OddsRequest(sportKey: "soccer_turkey_super_league"))
     }
 }

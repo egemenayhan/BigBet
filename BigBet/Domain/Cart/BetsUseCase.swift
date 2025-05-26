@@ -13,8 +13,9 @@ protocol BetsUseCaseProtocol {
     var betsSubject: PublishRelay<[Bet]> { get } // array updates
     var betUpdateSubject: PublishRelay<Bet> { get } // single bet changes
     var totalBetPrice: BehaviorRelay<Double> { get } // cart total updates
-    
-    func getAllBets() -> [Bet]
+
+    var bets: [Bet] { get }
+
     func placeBet(_ bet: Bet)
     func removeBetForEvent(id: String)
     func getBetForEvent(id: String) -> Bet?
@@ -54,17 +55,17 @@ final class BetsUseCase: BetsUseCaseProtocol {
         let total = bets.reduce(1) { $0 * $1.odd.price }
         totalBetPrice.accept(total)
     }
-    
+
+    var bets: [Bet] {
+        storage.getAllBets()
+    }
+
     var betsSubject: PublishRelay<[Bet]> {
         storage.betsSubject
     }
     
     var betUpdateSubject: PublishRelay<Bet> {
         storage.betUpdateSubject
-    }
-    
-    func getAllBets() -> [Bet] {
-        storage.getAllBets()
     }
     
     func placeBet(_ bet: Bet) {

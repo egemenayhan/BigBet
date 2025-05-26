@@ -23,22 +23,15 @@ struct BetEvent: Decodable {
     // extracted odds
     let odds: [DisplayOutcome]
 
-    var displayTitle: String {
-        "\(homeTeam) - \(awayTeam)"
-    }
-
-    private let dateFormatter: DateFormatter = {
+    // Static formatters for better performance - shared across all instances
+    static let sharedDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
+        formatter.dateStyle = AppConstants.Formatting.shortDateStyle
+        formatter.timeStyle = AppConstants.Formatting.shortTimeStyle
         return formatter
     }()
 
-    var displayDate: String {
-        dateFormatter.string(from: commenceTime)
-    }
-
-    private let iso8601Formatter: ISO8601DateFormatter = {
+    static let sharedISO8601Formatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime]
         return formatter
@@ -87,7 +80,7 @@ struct BetEvent: Decodable {
         self.bookmakers = try container.decode([Bookmaker].self, forKey: .bookmakers)
 
         let timeString = try container.decode(String.self, forKey: .commenceTime)
-        guard let parsedDate = iso8601Formatter.date(from: timeString) else {
+        guard let parsedDate = Self.sharedISO8601Formatter.date(from: timeString) else {
             throw DecodingError.dataCorruptedError(forKey: .commenceTime,
                 in: container,
                 debugDescription: "Invalid ISO8601 date format: \(timeString)"
@@ -122,8 +115,8 @@ struct BetEvent: Decodable {
 extension BetEvent: Hashable {
 
     static func == (lhs: BetEvent, rhs: BetEvent) -> Bool {
-            lhs.id == rhs.id
-        }
+        lhs.id == rhs.id
+    }
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)

@@ -84,7 +84,6 @@ class EventsListViewController: UIViewController {
     private func setupSearchBar() {
         searchBar = UISearchBar()
         searchBar.searchBarStyle = .minimal
-        searchBar.delegate = self
         searchBar.tintColor = ThemeManager.current.primaryGreen
         searchBar.backgroundColor = ThemeManager.current.cardBackground
         searchBar.barTintColor = ThemeManager.current.primaryGreen
@@ -94,11 +93,53 @@ class EventsListViewController: UIViewController {
         searchBar.searchTextField.textColor = ThemeManager.current.textPrimary
         searchBar.searchTextField.leftView?.tintColor = ThemeManager.current.primaryGreen
         searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
-            string: "Search teams",
+            string: AppConstants.Search.placeholder,
             attributes: [NSAttributedString.Key.foregroundColor: ThemeManager.current.textSecondary]
         )
 
         tableView.tableHeaderView = searchBar
+        setupSearchBinding()
+    }
+
+    private func setupSearchBinding() {
+        // Reactive search with debouncing
+        searchBar.rx.text.orEmpty
+            .debounce(.milliseconds(AppConstants.Search.debounceTimeMilliseconds), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .map { [weak self] searchText in
+                self?.viewModel.filterEvents(for: searchText) ?? []
+            }
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] filteredEvents in
+                self?.applySnapshot(events: filteredEvents)
+            })
+            .disposed(by: disposeBag)
+
+        // Handle cancel button
+        searchBar.rx.cancelButtonClicked
+            .subscribe(onNext: { [weak self] in
+                guard let self else { return }
+                self.searchBar.text = ""
+                self.searchBar.resignFirstResponder()
+                self.searchBar.showsCancelButton = false
+                self.applySnapshot(events: self.viewModel.events.value)
+            })
+            .disposed(by: disposeBag)
+
+        // Handle search button
+        searchBar.rx.searchButtonClicked
+            .subscribe(onNext: { [weak self] in
+                self?.searchBar.resignFirstResponder()
+            })
+            .disposed(by: disposeBag)
+
+        // Handle text begin editing
+        searchBar.rx.textDidBeginEditing
+            .subscribe(onNext: { [weak self] in
+                guard let self, self.searchBar.text?.isEmpty ?? true else { return }
+                self.searchBar.showsCancelButton = true
+            })
+            .disposed(by: disposeBag)
     }
 
     private func configureDataSource() {
@@ -139,21 +180,22 @@ class EventsListViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        viewModel.updatedEvents
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] items in
-                guard let self, !items.isEmpty else { return }
-
-                var snapshot = self.dataSource.snapshot()
-                snapshot.reloadItems(items)
-                self.dataSource.apply(snapshot, animatingDifferences: false)
-            })
-            .disposed(by: disposeBag)
-
         viewModel.totalBetPrice
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
                 self?.updateCartButton()
+            })
+            .disposed(by: disposeBag)
+
+        // Observe bet changes directly and refresh table view
+        viewModel.updatedEvents
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self else { return }
+                // Reconfigure all visible items to update cell selection states
+                var snapshot = self.dataSource.snapshot()
+                snapshot.reconfigureItems(snapshot.itemIdentifiers)
+                self.dataSource.apply(snapshot, animatingDifferences: false)
             })
             .disposed(by: disposeBag)
 
@@ -171,13 +213,13 @@ class EventsListViewController: UIViewController {
     // MARK: - UI updates
 
     func updateCartButton() {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
+        let price = String(
+            format: "%.\(AppConstants.Formatting.priceDecimalPlaces)f", viewModel.totalBetPrice.value
+        )
 
         let cartButton = UIBarButtonItem(
             image: cartImage,
-            title: formatter.string(from: viewModel.totalBetPrice.value as NSNumber) ?? "",
+            title: price,
             target: self,
             action: #selector(cartButtonTapped)
         )
@@ -241,26 +283,4 @@ extension EventsListViewController: UITableViewDelegate {
     }
 }
 
-extension EventsListViewController: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let results = viewModel.filterEvents(for: searchText)
-        applySnapshot(events: results)
-    }
 
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = ""
-        searchBar.resignFirstResponder()
-        searchBar.showsCancelButton = false
-        applySnapshot(events: viewModel.events.value)
-    }
-
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        guard searchBar.text?.isEmpty ?? true else { return }
-        searchBar.showsCancelButton = true
-    }
-}

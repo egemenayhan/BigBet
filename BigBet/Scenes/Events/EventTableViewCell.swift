@@ -34,19 +34,21 @@ class EventTableViewCell: UITableViewCell {
         backgroundColor = .clear
 
         contentView.layer.shadowColor = ThemeManager.current.cardShadowColor.cgColor
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        contentView.layer.shadowOpacity = 0.2
-        contentView.layer.shadowRadius = 4
+        contentView.layer.shadowOffset = AppConstants.UI.shadowOffset
+        contentView.layer.shadowOpacity = AppConstants.UI.shadowOpacity
+        contentView.layer.shadowRadius = AppConstants.UI.shadowRadius
+        contentView.layer.shouldRasterize = true
+        contentView.layer.rasterizationScale = UIScreen.main.scale
         contentView.backgroundColor = .clear
 
         contentView.addSubview(eventCardView)
 
         eventCardView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            eventCardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            eventCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            eventCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            eventCardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            eventCardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AppConstants.UI.cellVerticalPadding),
+            eventCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppConstants.UI.defaultPadding),
+            eventCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppConstants.UI.defaultPadding),
+            eventCardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppConstants.UI.cellVerticalPadding)
         ])
     }
 
