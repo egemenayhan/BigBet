@@ -10,6 +10,10 @@
 		7BD6BF912DD1E33800740476 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7BD6BF902DD1E33800740476 /* FirebaseAnalytics */; };
 		7BD6BF932DD1E33800740476 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7BD6BF922DD1E33800740476 /* FirebaseCrashlytics */; };
 		7BD6BF962DD1E34F00740476 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7BD6BF952DD1E34F00740476 /* Alamofire */; };
+		7BF242F62DE21A5200756D83 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 7BF242F52DE21A5200756D83 /* RxBlocking */; };
+		7BF242F82DE21A5200756D83 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 7BF242F72DE21A5200756D83 /* RxCocoa */; };
+		7BF242FA2DE21A5200756D83 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7BF242F92DE21A5200756D83 /* RxSwift */; };
+		7BF242FC2DE21A5200756D83 /* RxTest in Frameworks */ = {isa = PBXBuildFile; productRef = 7BF242FB2DE21A5200756D83 /* RxTest */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +77,8 @@
 			files = (
 				7BD6BF962DD1E34F00740476 /* Alamofire in Frameworks */,
 				7BD6BF912DD1E33800740476 /* FirebaseAnalytics in Frameworks */,
+				7BF242FA2DE21A5200756D83 /* RxSwift in Frameworks */,
+				7BF242F82DE21A5200756D83 /* RxCocoa in Frameworks */,
 				7BD6BF932DD1E33800740476 /* FirebaseCrashlytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -81,6 +87,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BF242FC2DE21A5200756D83 /* RxTest in Frameworks */,
+				7BF242F62DE21A5200756D83 /* RxBlocking in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +145,8 @@
 				7BD6BF902DD1E33800740476 /* FirebaseAnalytics */,
 				7BD6BF922DD1E33800740476 /* FirebaseCrashlytics */,
 				7BD6BF952DD1E34F00740476 /* Alamofire */,
+				7BF242F72DE21A5200756D83 /* RxCocoa */,
+				7BF242F92DE21A5200756D83 /* RxSwift */,
 			);
 			productName = BigBet;
 			productReference = 7B2E84912DCE335000E7AAC1 /* BigBet.app */;
@@ -160,6 +170,8 @@
 			);
 			name = BigBetTests;
 			packageProductDependencies = (
+				7BF242F52DE21A5200756D83 /* RxBlocking */,
+				7BF242FB2DE21A5200756D83 /* RxTest */,
 			);
 			productName = BigBetTests;
 			productReference = 7B2E84A72DCE335200E7AAC1 /* BigBetTests.xctest */;
@@ -223,6 +235,7 @@
 			packageReferences = (
 				7BD6BF8F2DD1E33800740476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				7BD6BF942DD1E34F00740476 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				7BF242F42DE21A5200756D83 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7B2E84922DCE335000E7AAC1 /* Products */;
@@ -601,6 +614,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		7BF242F42DE21A5200756D83 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -618,6 +639,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7BD6BF942DD1E34F00740476 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		7BF242F52DE21A5200756D83 /* RxBlocking */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7BF242F42DE21A5200756D83 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxBlocking;
+		};
+		7BF242F72DE21A5200756D83 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7BF242F42DE21A5200756D83 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		7BF242F92DE21A5200756D83 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7BF242F42DE21A5200756D83 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		7BF242FB2DE21A5200756D83 /* RxTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7BF242F42DE21A5200756D83 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxTest;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

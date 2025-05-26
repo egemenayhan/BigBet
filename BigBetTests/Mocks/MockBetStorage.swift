@@ -5,12 +5,13 @@
 //  Created by Egemen Ayhan on 12.05.2025.
 //
 
-import Combine
+import RxSwift
+import RxRelay
 @testable import BigBet
 
 class MockBetStorage: BetStorageProtocol {
-    var betsSubject = PassthroughSubject<[Bet], Never>()
-    var betUpdateSubject = PassthroughSubject<Bet, Never>()
+    var betsSubject = PublishRelay<[Bet]>()
+    var betUpdateSubject = PublishRelay<Bet>()
     private var bets: [Bet] = []
 
     func getAllBets() -> [Bet] {
@@ -19,12 +20,12 @@ class MockBetStorage: BetStorageProtocol {
 
     func addBet(_ bet: Bet) {
         bets.append(bet)
-        betsSubject.send(bets)
+        betsSubject.accept(bets)
     }
 
     func removeBetForEvent(id: String) {
         bets.removeAll { $0.event.id == id }
-        betsSubject.send(bets)
+        betsSubject.accept(bets)
     }
 
     func getBetForEvent(id: String) -> Bet? {

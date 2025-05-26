@@ -6,19 +6,18 @@
 //
 
 import Foundation
-import Combine
+import RxSwift
+import RxRelay
 
 final class EventsListViewModel {
-
-    @Published var events: [BetEvent] = []
-    @Published var totalBetPrice: Double = 0
-
-    var updatedEvents = PassthroughSubject<[BetEvent], Never>()
-    var errorSubject = PassthroughSubject<String, Never>()
+    let events = BehaviorRelay<[BetEvent]>(value: [])
+    let totalBetPrice = BehaviorRelay<Double>(value: 0)
+    let updatedEvents = PublishRelay<[BetEvent]>()
+    let errorSubject = PublishRelay<String>()
 
     private let eventsUseCase: EventsUseCaseProtocol
     private let betsUseCase: BetsUseCaseProtocol
-    private var cancellables: Set<AnyCancellable> = []
+    private let disposeBag = DisposeBag()
 
     init(eventsUseCase: EventsUseCaseProtocol, betsUseCase: BetsUseCaseProtocol) {
         self.eventsUseCase = eventsUseCase
@@ -29,41 +28,43 @@ final class EventsListViewModel {
 
     func bindBetsUseCase() {
         betsUseCase.betUpdateSubject
-            .receive(on: RunLoop.main)
-            .sink { [weak self] bet in
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] bet in
                 guard let self else { return }
-                self.updatedEvents.send([bet.event])
-            }
-            .store(in: &cancellables)
+                self.updatedEvents.accept([bet.event])
+            })
+            .disposed(by: disposeBag)
 
         betsUseCase.totalBetPrice
-            .receive(on: RunLoop.main)
-            .sink { [weak self] price in
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] price in
                 guard let self else { return }
-                self.totalBetPrice = price
-            }
-            .store(in: &cancellables)
+                self.totalBetPrice.accept(price)
+            })
+            .disposed(by: disposeBag)
     }
 
     func fetchEvents() {
         Task {
             do {
-                self.events = try await self.eventsUseCase.fetchEvents()
+                let fetchedEvents = try await self.eventsUseCase.fetchEvents()
+                await MainActor.run {
+                    self.events.accept(fetchedEvents)
+                }
             } catch {
-                print("Error fetching events: \(error)")
-                errorSubject.send(error.localizedDescription)
+                await MainActor.run {
+                    print("Error fetching events: \(error)")
+                    self.errorSubject.accept(error.localizedDescription)
+                }
             }
         }
     }
 
     func filterEvents(for text: String) -> [BetEvent] {
         if text.isEmpty {
-            return events
+            events.value
         } else {
-            return events.filter {
-                $0.homeTeam.localizedCaseInsensitiveContains(text) ||
-                $0.awayTeam.localizedCaseInsensitiveContains(text)
-            }
+            events.value.filter { $0.matches(searchText: text) }
         }
     }
 

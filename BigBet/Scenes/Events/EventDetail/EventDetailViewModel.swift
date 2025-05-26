@@ -6,17 +6,16 @@
 //
 
 import Foundation
-import Combine
+import RxSwift
+import RxRelay
 
 @MainActor
 final class EventDetailViewModel {
-
-    @Published var selectedOddIndex: Int?
-
+    let selectedOddIndex = BehaviorRelay<Int?>(value: nil)
     let event: BetEvent
 
     private let betsUseCase: BetsUseCaseProtocol
-    private var cancellables: Set<AnyCancellable> = []
+    private let disposeBag = DisposeBag()
 
     init(event: BetEvent, betsUseCase: BetsUseCaseProtocol) {
         self.event = event
@@ -24,17 +23,21 @@ final class EventDetailViewModel {
 
         if let bet = betsUseCase.getBetForEvent(id: event.id),
            let index = event.odds.firstIndex(of: bet.odd) {
-            selectedOddIndex = index
+            selectedOddIndex.accept(index)
         }
     }
 
     func placeBet(oddIndex: Int) {
         betsUseCase.placeBet(Bet(event: event, odd: event.odds[oddIndex]))
-        selectedOddIndex = oddIndex
+        selectedOddIndex.accept(oddIndex)
     }
 
     func removeBet() {
         betsUseCase.removeBetForEvent(id: event.id)
-        selectedOddIndex = nil
+        selectedOddIndex.accept(nil)
+    }
+
+    func getEvent() -> BetEvent {
+        return event
     }
 }

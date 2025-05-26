@@ -32,7 +32,7 @@ class EventCardView: UIView {
 
     private func setupViews() {
         // Setup the card view container
-        self.layer.cornerRadius = 8
+        self.layer.cornerRadius = AppConstants.UI.cardCornerRadius
         self.layer.borderColor = ThemeManager.current.borderColor.cgColor
         self.layer.borderWidth = 1
         self.backgroundColor = ThemeManager.current.cardBackground
@@ -45,10 +45,10 @@ class EventCardView: UIView {
         self.addSubview(mainStack)
 
         NSLayoutConstraint.activate([
-            mainStack.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-            mainStack.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            mainStack.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            mainStack.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10)
+            mainStack.topAnchor.constraint(equalTo: self.topAnchor, constant: AppConstants.UI.cellVerticalPadding),
+            mainStack.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: AppConstants.UI.defaultPadding),
+            mainStack.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -AppConstants.UI.defaultPadding),
+            mainStack.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -AppConstants.UI.cellVerticalPadding)
         ])
 
         // Info stack (team name left, time right)
@@ -59,9 +59,11 @@ class EventCardView: UIView {
 
         titleLabel.font = .boldSystemFont(ofSize: 14)
         titleLabel.textColor = ThemeManager.current.textPrimary
+        titleLabel.numberOfLines = 0
 
         dateLabel.font = .systemFont(ofSize: 12)
         dateLabel.textColor = ThemeManager.current.textSecondary
+        dateLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         infoStack.addArrangedSubview(titleLabel)
         infoStack.addArrangedSubview(UIView()) // spacer
@@ -70,7 +72,7 @@ class EventCardView: UIView {
 
         // Odds horizontal stack
         oddsStack.axis = .horizontal
-        oddsStack.spacing = 8
+        oddsStack.spacing = AppConstants.UI.smallPadding
         oddsStack.distribution = .fillEqually
         oddsStack.alignment = .fill
         oddsStack.translatesAutoresizingMaskIntoConstraints = false
@@ -80,7 +82,7 @@ class EventCardView: UIView {
     // Configure with event + selectedIndex (from ViewModel)
     func configure(with event: BetEvent, selectedIndex: Int?) {
         titleLabel.text = event.displayTitle
-        dateLabel.text = event.displayDate
+        dateLabel.text = event.timeUntilEvent
 
         // Clear old buttons
         oddButtons.forEach { $0.removeFromSuperview() }
@@ -88,9 +90,10 @@ class EventCardView: UIView {
 
         for (i, outcome) in event.odds.enumerated() {
             let button = SelectableOddButton()
-            button.setTitle(String(format: "%.2f\n%@", outcome.price, outcome.label.rawValue), for: .normal)
+            button.setTitle(outcome.buttonDisplayText, for: .normal)
             button.tag = i
             button.addTarget(self, action: #selector(oddTapped(_:)), for: .touchUpInside)
+            
             oddsStack.addArrangedSubview(button)
             oddButtons.append(button)
         }

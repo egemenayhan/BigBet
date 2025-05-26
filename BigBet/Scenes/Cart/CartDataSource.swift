@@ -23,7 +23,7 @@ class CartDataSource: UITableViewDiffableDataSource<CartSection, Bet> {
     func generateSnapshot() -> NSDiffableDataSourceSnapshot<CartSection, Bet> {
         var snapshot = NSDiffableDataSourceSnapshot<CartSection, Bet>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(viewModel.bets)
+        snapshot.appendItems(viewModel.bets.value)
         return snapshot
     }
 

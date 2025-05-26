@@ -6,72 +6,71 @@
 //
 
 import Foundation
-import Combine
+import RxSwift
+import RxRelay
 
 protocol BetsUseCaseProtocol {
+    var betsSubject: PublishRelay<[Bet]> { get } // array updates
+    var betUpdateSubject: PublishRelay<Bet> { get } // single bet changes
+    var totalBetPrice: BehaviorRelay<Double> { get } // cart total updates
 
-    var betsSubject: PassthroughSubject<[Bet], Never> { get } // array updates
-    var betUpdateSubject: PassthroughSubject<Bet, Never> { get } // single bet changes
-    var totalBetPrice: CurrentValueSubject<Double, Never> { get } // cart total updates
+    var bets: [Bet] { get }
 
-    func getAllBets() -> [Bet]
     func placeBet(_ bet: Bet)
     func removeBetForEvent(id: String)
     func getBetForEvent(id: String) -> Bet?
 }
 
 final class BetsUseCase: BetsUseCaseProtocol {
-
     private let analyticsUseCase: AnalyticsUseCaseProtocol
     private let storage: BetStorageProtocol
-    private var cancellables: Set<AnyCancellable> = []
-
-    var totalBetPrice = CurrentValueSubject<Double, Never>(0)
-
+    private let disposeBag = DisposeBag()
+    
+    var totalBetPrice = BehaviorRelay<Double>(value: 0)
+    
     init(storage: BetStorageProtocol, analyticsUseCase: AnalyticsUseCaseProtocol) {
         self.storage = storage
         self.analyticsUseCase = analyticsUseCase
-
+        
         bindTotalBetPrice()
-
+        
         let bets = storage.getAllBets()
         calculateTotalBetPrice(bets: bets)
     }
-
+    
     private func bindTotalBetPrice() {
         storage.betsSubject
-            .sink { [weak self] bets in
+            .subscribe(onNext: { [weak self] bets in
                 guard let self = self else { return }
-                calculateTotalBetPrice(bets: bets)
-            }
-            .store(in: &cancellables)
+                self.calculateTotalBetPrice(bets: bets)
+            })
+            .disposed(by: disposeBag)
     }
-
+    
     private func calculateTotalBetPrice(bets: [Bet]) {
         guard !bets.isEmpty else {
-            totalBetPrice.value = 0
-            totalBetPrice.send(0)
+            totalBetPrice.accept(0)
             return
         }
-        totalBetPrice.value = bets.reduce(1) { $0 * $1.odd.price }
-        totalBetPrice.send(totalBetPrice.value)
+        let total = bets.reduce(1) { $0 * $1.odd.price }
+        totalBetPrice.accept(total)
     }
 
-    var betsSubject: PassthroughSubject<[Bet], Never> {
-        storage.betsSubject
-    }
-
-    var betUpdateSubject: PassthroughSubject<Bet, Never> {
-        storage.betUpdateSubject
-    }
-
-    func getAllBets() -> [Bet] {
+    var bets: [Bet] {
         storage.getAllBets()
     }
 
+    var betsSubject: PublishRelay<[Bet]> {
+        storage.betsSubject
+    }
+    
+    var betUpdateSubject: PublishRelay<Bet> {
+        storage.betUpdateSubject
+    }
+    
     func placeBet(_ bet: Bet) {
         storage.addBet(bet)
-
+        
         analyticsUseCase.logEvent(
             .cart(.add),
             parameters: [
@@ -81,10 +80,10 @@ final class BetsUseCase: BetsUseCaseProtocol {
             ]
         )
     }
-
+    
     func removeBetForEvent(id: String) {
         storage.removeBetForEvent(id: id)
-
+        
         analyticsUseCase.logEvent(
             .cart(.remove),
             parameters: [
@@ -92,7 +91,7 @@ final class BetsUseCase: BetsUseCaseProtocol {
             ]
         )
     }
-
+    
     func getBetForEvent(id: String) -> Bet? {
         storage.getBetForEvent(id: id)
     }

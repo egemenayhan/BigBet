@@ -6,12 +6,12 @@
 //
 
 import Foundation
-import Combine
+import RxSwift
+import RxRelay
 
 protocol BetStorageProtocol {
-
-    var betsSubject: PassthroughSubject<[Bet], Never> { get } // array changes
-    var betUpdateSubject: PassthroughSubject<Bet, Never> { get } // single bet changes
+    var betsSubject: PublishRelay<[Bet]> { get } // array changes
+    var betUpdateSubject: PublishRelay<Bet> { get } // single bet changes
 
     func getAllBets() -> [Bet]
     func addBet(_ bet: Bet)
@@ -20,7 +20,6 @@ protocol BetStorageProtocol {
 }
 
 final class BetDataStorage: BetStorageProtocol {
-
     // Used both array and dictionary because I want to provide O(1) complexity for lookups. Array is just for keeping order.
     private var betsArray: [String] = []
     private var betsDictionary: [String: Bet] = [:]
@@ -28,8 +27,8 @@ final class BetDataStorage: BetStorageProtocol {
     // to prevent race conditions in data storage
     private let queue = DispatchQueue(label: "BetDataStorageQueue", attributes: .concurrent)
 
-    var betsSubject = PassthroughSubject<[Bet], Never>()
-    var betUpdateSubject = PassthroughSubject<Bet, Never>()
+    var betsSubject = PublishRelay<[Bet]>()
+    var betUpdateSubject = PublishRelay<Bet>()
 
     func getAllBets() -> [Bet] {
         queue.sync {
@@ -84,14 +83,14 @@ final class BetDataStorage: BetStorageProtocol {
         queue.async { [weak self] in
             guard let self else { return }
             let updatedBets = self.betsArray.compactMap { self.betsDictionary[$0] }
-            self.betsSubject.send(updatedBets)
+            self.betsSubject.accept(updatedBets)
         }
     }
 
     private func publishBetUpdate(for bet: Bet) {
         queue.async { [weak self] in
             guard let self else { return }
-            self.betUpdateSubject.send(bet)
+            self.betUpdateSubject.accept(bet)
         }
     }
 }

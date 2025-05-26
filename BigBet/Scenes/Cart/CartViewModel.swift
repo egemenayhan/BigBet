@@ -6,45 +6,45 @@
 //
 
 import Foundation
-import Combine
+import RxSwift
+import RxRelay
 
 @MainActor
 final class CartViewModel {
-
-    @Published var bets: [Bet] = []
-
-    private let betsUseCase: BetsUseCaseProtocol
+    let bets = BehaviorRelay<[Bet]>(value: [])
     private(set) var totalBetPrice: Double = 0
-    private var cancellables: Set<AnyCancellable> = []
+    
+    private let betsUseCase: BetsUseCaseProtocol
+    private let disposeBag = DisposeBag()
 
     init(betsUseCase: BetsUseCaseProtocol) {
         self.betsUseCase = betsUseCase
-
         bind()
-
-        bets = betsUseCase.getAllBets()
+        
+        bets.accept(betsUseCase.bets)
         totalBetPrice = betsUseCase.totalBetPrice.value
     }
 
     private func bind() {
         betsUseCase.betsSubject
-            .receive(on: DispatchQueue.main)
-            .assign(to: &$bets)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] newBets in
+                self?.bets.accept(newBets)
+            })
+            .disposed(by: disposeBag)
 
         betsUseCase.totalBetPrice
-            .receive(on: RunLoop.main)
-            .sink { [weak self] price in
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] price in
                 guard let self else { return }
                 self.totalBetPrice = price
-            }
-            .store(in: &cancellables)
+            })
+            .disposed(by: disposeBag)
     }
 
     func removeBet(at index: Int) {
-        guard index >= 0 && index < bets.count else { return }
-        
-        let betToRemove = bets[index]
-        
+        guard index >= 0 && index < (bets.value.count) else { return }
+        let betToRemove = bets.value[index]
         betsUseCase.removeBetForEvent(id: betToRemove.event.id)
     }
 
